@@ -1,0 +1,301 @@
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 6
+Server version: 5.5.16 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2011, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+mysql> use cvr
+Database changed
+mysql> select * from student;
++-----+---------+-------+------------+-----------+--------+
+| sno | sname   | marks | city       | mobile    | gender |
++-----+---------+-------+------------+-----------+--------+
+| 1   | sri     |    90 | hyderabad  |   9002327 | male   |
+| 10  | sasi    |    90 | warangal   | 649729878 | male   |
+| 2   | supriya |    34 | warangal   |  98302987 | female |
+| 3   | soniya  |    50 | rangareddy |  98462987 | female |
+| 4   | sanya   |    70 | hyderabad  |  98782987 | female |
+| 5   | pav     |    74 | pune       |  78782987 | female |
+| 6   | rishi   |    94 | mumbai     |  78789887 | male   |
+| 7   | tanuja  |    89 | punjab     |   7889887 | female |
+| 8   | vikram  |    89 | assam      |  64532678 | male   |
+| 9   | suba    |    78 | nepal      |  64972678 | female |
++-----+---------+-------+------------+-----------+--------+
+10 rows in set (0.00 sec)
+
+mysql> select * from student where city='pune';
++-----+-------+-------+------+----------+--------+
+| sno | sname | marks | city | mobile   | gender |
++-----+-------+-------+------+----------+--------+
+| 5   | pav   |    74 | pune | 78782987 | female |
++-----+-------+-------+------+----------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from student where city='hyderabad' or city='pune';
++-----+-------+-------+-----------+----------+--------+
+| sno | sname | marks | city      | mobile   | gender |
++-----+-------+-------+-----------+----------+--------+
+| 1   | sri   |    90 | hyderabad |  9002327 | male   |
+| 4   | sanya |    70 | hyderabad | 98782987 | female |
+| 5   | pav   |    74 | pune      | 78782987 | female |
++-----+-------+-------+-----------+----------+--------+
+3 rows in set (0.00 sec)
+
+mysql> select sname from student where (city='hyderabad' and gender='female') or (city='warangal' and gender='male') or city='mumbai';
++-------+
+| sname |
++-------+
+| sasi  |
+| sanya |
+| rishi |
++-------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student where (city='hyderabad' and gender='male' and marks>70)or(gender='female' and marks>50);
++-----+--------+-------+-----------+----------+--------+
+| sno | sname  | marks | city      | mobile   | gender |
++-----+--------+-------+-----------+----------+--------+
+| 1   | sri    |    90 | hyderabad |  9002327 | male   |
+| 4   | sanya  |    70 | hyderabad | 98782987 | female |
+| 5   | pav    |    74 | pune      | 78782987 | female |
+| 7   | tanuja |    89 | punjab    |  7889887 | female |
+| 9   | suba   |    78 | nepal     | 64972678 | female |
++-----+--------+-------+-----------+----------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from student where city='pune' and gender='male';
+Empty set (0.00 sec)
+
+mysql> select * from student where city!='rangareddy';
++-----+---------+-------+-----------+-----------+--------+
+| sno | sname   | marks | city      | mobile    | gender |
++-----+---------+-------+-----------+-----------+--------+
+| 1   | sri     |    90 | hyderabad |   9002327 | male   |
+| 10  | sasi    |    90 | warangal  | 649729878 | male   |
+| 2   | supriya |    34 | warangal  |  98302987 | female |
+| 4   | sanya   |    70 | hyderabad |  98782987 | female |
+| 5   | pav     |    74 | pune      |  78782987 | female |
+| 6   | rishi   |    94 | mumbai    |  78789887 | male   |
+| 7   | tanuja  |    89 | punjab    |   7889887 | female |
+| 8   | vikram  |    89 | assam     |  64532678 | male   |
+| 9   | suba    |    78 | nepal     |  64972678 | female |
++-----+---------+-------+-----------+-----------+--------+
+9 rows in set (0.00 sec)
+
+mysql> select * from student where (marks >50 and marks<80) and (city='hyderabad' or city='warangal');
++-----+-------+-------+-----------+----------+--------+
+| sno | sname | marks | city      | mobile   | gender |
++-----+-------+-------+-----------+----------+--------+
+| 4   | sanya |    70 | hyderabad | 98782987 | female |
++-----+-------+-------+-----------+----------+--------+
+1 row in set (0.00 sec)
+
+mysql> select * from student where sname like 's%a';
++-----+---------+-------+------------+----------+--------+
+| sno | sname   | marks | city       | mobile   | gender |
++-----+---------+-------+------------+----------+--------+
+| 2   | supriya |    34 | warangal   | 98302987 | female |
+| 3   | soniya  |    50 | rangareddy | 98462987 | female |
+| 4   | sanya   |    70 | hyderabad  | 98782987 | female |
+| 9   | suba    |    78 | nepal      | 64972678 | female |
++-----+---------+-------+------------+----------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select city,count(*) from student group by city;
++------------+----------+
+| city       | count(*) |
++------------+----------+
+| assam      |        1 |
+| hyderabad  |        2 |
+| mumbai     |        1 |
+| nepal      |        1 |
+| pune       |        1 |
+| punjab     |        1 |
+| rangareddy |        1 |
+| warangal   |        2 |
++------------+----------+
+8 rows in set (0.00 sec)
+
+mysql> select city,AVG(marks) as avg_score  from student group by city order by avg_score DESC limit 1;
++--------+-----------+
+| city   | avg_score |
++--------+-----------+
+| mumbai |   94.0000 |
++--------+-----------+
+1 row in set (0.00 sec)
+
+mysql> select city,MAX(marks) as top_score  from student group by city ;
++------------+-----------+
+| city       | top_score |
++------------+-----------+
+| assam      |        89 |
+| hyderabad  |        90 |
+| mumbai     |        94 |
+| nepal      |        78 |
+| pune       |        74 |
+| punjab     |        89 |
+| rangareddy |        50 |
+| warangal   |        90 |
++------------+-----------+
+8 rows in set (0.00 sec)
+
+mysql> select * from student where city='hyderabad' order by marks desc limit 1;
++-----+-------+-------+-----------+---------+--------+
+| sno | sname | marks | city      | mobile  | gender |
++-----+-------+-------+-----------+---------+--------+
+| 1   | sri   |    90 | hyderabad | 9002327 | male   |
++-----+-------+-------+-----------+---------+--------+
+1 row in set (0.00 sec)
+
+mysql> create database retail
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> use retail;
+Database changed
+mysql> create table salespeople(snum int not null,sname varchar(30) not null,city varchar(30) not null,comm decimal(4,2) not null,primary key(snum));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> insert into salespeople values(1001,'peel','london',0.12);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into salespeople values(1002,'serres','san jose',0.13);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into salespeople values(1004,'motika','london',0.11);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into salespeople values(1007,'rifkin','barcelona',0.15);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into salespeople values(1003,'axelrod','new york',0.10);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into salespeople values(1005,'fran','london',0.26);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from salespeople;
++------+---------+-----------+------+
+| snum | sname   | city      | comm |
++------+---------+-----------+------+
+| 1001 | peel    | london    | 0.12 |
+| 1002 | serres  | san jose  | 0.13 |
+| 1003 | axelrod | new york  | 0.10 |
+| 1004 | motika  | london    | 0.11 |
+| 1005 | fran    | london    | 0.26 |
+| 1007 | rifkin  | barcelona | 0.15 |
++------+---------+-----------+------+
+6 rows in set (0.00 sec)
+
+mysql> create table customer(cnum int not null,cname varchar(30) not null,city varchar(30) not null,rating int not null,snum int not null,primary key(cnum),foreign key(snum) references salespeople(snum));
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into customer values(2001,'hoffman','london',100,1001);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customer values(2002,'giovanni','rome',200,1003);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customer values(2003,'liu','san jose',200,1002);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customer values(2004,'grass','berlin',300,1002);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customer values(2006,'clemens','london',100,1001);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into customer values(2008,'cisneros','san jose',300,1007);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into customer values(2007,'pereira','rome',100,1004);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select * from customer;
++------+----------+----------+--------+------+
+| cnum | cname    | city     | rating | snum |
++------+----------+----------+--------+------+
+| 2001 | hoffman  | london   |    100 | 1001 |
+| 2002 | giovanni | rome     |    200 | 1003 |
+| 2003 | liu      | san jose |    200 | 1002 |
+| 2004 | grass    | berlin   |    300 | 1002 |
+| 2006 | clemens  | london   |    100 | 1001 |
+| 2007 | pereira  | rome     |    100 | 1004 |
+| 2008 | cisneros | san jose |    300 | 1007 |
++------+----------+----------+--------+------+
+7 rows in set (0.00 sec)
+mysql> select * from salespeople;
++------+---------+-----------+------+
+| snum | sname   | city      | comm |
++------+---------+-----------+------+
+| 1001 | peel    | london    | 0.12 |
+| 1002 | serres  | san jose  | 0.13 |
+| 1003 | axelrod | new york  | 0.10 |
+| 1004 | motika  | london    | 0.11 |
+| 1005 | fran    | london    | 0.26 |
+| 1007 | rifkin  | barcelona | 0.15 |
++------+---------+-----------+------+
+6 rows in set (0.00 sec)
+SQL> select s.sname,count(c.cnum) from salespeople s left join customer c on s.snum=c.snum group by s.snum,s.sname order by s.snum;
+
+SNAME                          COUNT(C.CNUM)
+------------------------------ -------------
+peel                                       2
+serres                                     2
+axelrod                                    1
+motika                                     1
+fran                                       0
+rifkin                                     1
+
+6 rows selected.
+SQL> select s.sname,avg(c.rating) from salespeople s join customer c on s.snum=c.snum group by s.snum,s.sname order by avg(c.rating) desc fetch first 1 row only;
+
+SNAME                          AVG(C.RATING)
+------------------------------ -------------
+rifkin                                   300
+SQL> selects.sname,avg(c.rating) as avg_rating from salespeople s join customer c on s.snum = c.snum group by s.snum, s.sname avg(c.rating)=(select min(avg_rating)from (select avg(c.rating) as avg_rating from salespeople s join customer c on s.snum = c.snum group by s.snum)subquery)order by avg_rating;
+
+SNAME                          AVG_RATING
+------------------------------ ----------
+motika                                100
+peel                                  100
+
+SQL> select s.sname,s.city,c.city from salespeople s join customer c on s.snum=c.snum where s.
+city=c.city;
+
+SNAME                          CITY                           CITY
+------------------------------ ------------------------------ ------------------------------
+peel                           london                         london
+serres                         san jose                       san jose
+peel                           london                         london
+
+SQL> select s.sname,s.snum from salespeople s join customer c on s.snum=c.snum group by s.snum
+,s.sname having count(c.cnum)>1;
+
+SNAME                                SNUM
+------------------------------ ----------
+peel                                 1001
+serres                               1002
+serres                               1002
+
+SQL> select c.cname,c.rating,c.city from customer c where c.city='san jose' and c.rating>200;
+
+CNAME                              RATING CITY
+------------------------------ ---------- ------------------------------
+cisneros                              300 san jose
+
+SQL> select c.cname,c.rating,c.city from customer c where c.rating >(select avg(c1.rating) fro
+m customer c1 where c1.city='san jose');
+
+CNAME                              RATING CITY
+------------------------------ ---------- ------------------------------
+grass                                 300 berlin
+cisneros                              300 san jose
+
+ 
